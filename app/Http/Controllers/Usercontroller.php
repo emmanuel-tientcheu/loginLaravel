@@ -110,7 +110,6 @@ class Usercontroller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $request->validate(
             [
                 "name"=>"required",
@@ -119,13 +118,16 @@ class Usercontroller extends Controller
         );
         $user = User::find($id);
         if(isset($user)) {
-            $user->update($request->all());
+          //  $newUser = new User();
+            $newUser = $request->all();
+            $newUser["password"] = Hash::make($newUser["password"]);
+            $user->update($newUser);
             return response()->json([
                 "message"=>"modification reussi",
                 "data"=>$user
             ], 200);
         } else {
-            $user->update($request->all());
+            //$user->update($request->all());
             return response()->json([
                 "message"=>"utilisateur introuvable",
             ], 404);
